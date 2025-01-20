@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+  	}
+	
+	html {
+		@apply bg-gray-800;
+		font-family: "Quicksand Variable", sans-serif;
+		color: #fff;
+	}
+
+	h1 {
+		@apply font-bold md:text-lg;
+	}
+
+	p {
+		@apply text-sm md:text-base;
+	}
+
+}
+
+@layer components {
+	.container {
+		min-width: 375px;
+	}
+}
