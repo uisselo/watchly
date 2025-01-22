@@ -7,7 +7,7 @@
 	*::before,
 	*::after {
 		box-sizing: border-box;
-  	}
+	}
 	
 	html {
 		@apply bg-gray-800;
@@ -28,5 +28,18 @@
 @layer components {
 	.container {
 		min-width: 375px;
+	}
+
+	.grid-container {
+		@apply grid grid-cols-4 gap-x-4 gap-y-8 md:gap-y-12 lg:gap-y-16 md:grid-cols-12 lg:gap-x-5;
+	}
+
+	.input-box {
+		@apply px-3 py-2 bg-gray-600 md:px-4 md:py-3 rounded-[28px];
+		box-shadow: inset 0 17px 10px -14px rgba(0, 0, 0, 0.25);
+	}
+
+	.bg-custom-gradient {
+		background-image: linear-gradient(to right, #EF101D 10%, #EF7210 90%);
 	}
 }
