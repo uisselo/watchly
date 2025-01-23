@@ -25,7 +25,7 @@ function HeaderComponent() {
     <>
       <header
         ref={ref}
-        className="container flex items-center justify-between py-4 lg:grid-container lg:py-6"
+        className="container sticky top-0 z-20 flex items-center justify-between py-4 bg-gray-800 lg:grid-container lg:py-6"
       >
         <div className="flex items-center gap-4 md:col-span-8 lg:col-span-5">
           <ButtonIconComponent
