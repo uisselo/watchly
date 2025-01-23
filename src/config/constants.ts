@@ -1,5 +1,6 @@
 const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
+const IMAGE_URL = import.meta.env.VITE_IMAGE_URL;
 
 const HEADER_NAV_ITEMS = [
   { label: "Browse Movies", link: "/browse" },
@@ -12,4 +13,4 @@ const FOOTER_NAV_ITEMS = [
   { label: "FAQs", link: "/faqs" },
 ];
 
-export { API_URL, API_KEY, HEADER_NAV_ITEMS, FOOTER_NAV_ITEMS };
+export { API_URL, API_KEY, IMAGE_URL, HEADER_NAV_ITEMS, FOOTER_NAV_ITEMS };
