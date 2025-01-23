@@ -109,7 +109,7 @@ function ButtonComponent(props: Props) {
       >
         <div
           className={cn(
-            "flex items-center text-transparent bg-clip-text bg-custom-gradient",
+            "flex items-center text-transparent bg-clip-text custom-bg-gradient",
             SIZE_CLASSES[size],
             { "flex-row-reverse": iconPosition === "trailing" },
             { "p-0": isOutline },
@@ -126,7 +126,7 @@ function ButtonComponent(props: Props) {
   return (
     <button
       className={cn(
-        "relative flex items-center font-semibold rounded-[28px] bg-custom-gradient transition duration-300 ease-in-out transform",
+        "relative flex items-center font-semibold rounded-[28px] custom-bg-gradient transition duration-300 ease-in-out transform",
         { "hover:scale-105": variant === "primary" },
         { "flex-row-reverse": iconPosition === "trailing" },
         isFull ? "w-full" : "w-max",
