@@ -1,3 +1,3 @@
-export * from "./browse";
+export * from "./browse-movies";
 export * from "./landing";
 export * from "./shared";
