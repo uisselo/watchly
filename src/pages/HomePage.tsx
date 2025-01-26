@@ -1,14 +1,23 @@
+import { useEffect } from "react";
 import { useMediaQuery } from "@uidotdev/usehooks";
 import { CarouselComponent } from "@GlobalComponents";
 import {
   FilterComponent,
   MovieItemComponent,
+  useBrowseMoviesStore,
   useLandingQueries,
   useSharedQueries,
 } from "@Modules";
 import { formatDate } from "@Utilities";
 
 function HomePage() {
+  const clearPayload = useBrowseMoviesStore((state) => state.clearPayload);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Runs only once on navigation from a different path.
+  useEffect(() => {
+    clearPayload();
+  }, []);
+
   return (
     <div className="grid-container">
       <div className="col-span-4 md:col-span-12">
@@ -19,7 +28,7 @@ function HomePage() {
           <TopRatedMoviesSection />
         </div>
         <div className="col-span-4 md:col-span-6 lg:col-span-4 lg:row-span-5">
-          <FilterComponent />
+          <FilterComponent showTitle />
         </div>
         <div className="h-auto col-span-4 md:col-span-12 lg:col-span-8 lg:row-span-2">
           <CelebritiesSection />
