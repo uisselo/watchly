@@ -126,7 +126,7 @@ function ButtonComponent(props: Props) {
   return (
     <button
       className={cn(
-        "relative flex items-center font-semibold rounded-[28px] custom-bg-gradient transition duration-300 ease-in-out transform",
+        "relative flex justify-center items-center font-semibold rounded-[28px] custom-bg-gradient transition duration-300 ease-in-out transform",
         { "hover:scale-105": variant === "primary" },
         { "flex-row-reverse": iconPosition === "trailing" },
         isFull ? "w-full" : "w-max",
