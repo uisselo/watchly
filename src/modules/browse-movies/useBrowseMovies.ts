@@ -30,9 +30,7 @@ export function useBrowseMovies() {
   const location = useLocation();
   const navigate = useNavigate();
   const { firstReleaseYear, latestReleaseYear } = useBrowseMoviesQueries();
-  const payload = useBrowseMoviesStore((state) => state.payload);
-  const updatePayload = useBrowseMoviesStore((state) => state.updatePayload);
-  const updateGenres = useBrowseMoviesStore((state) => state.updateGenres);
+  const { payload, updatePayload, updateGenres } = useBrowseMoviesStore();
 
   /**
    * Generates a list of decades (e.g., "1990s", "2000s") based on the movie release years.
