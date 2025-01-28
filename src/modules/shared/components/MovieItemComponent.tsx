@@ -29,20 +29,35 @@ function Image(
 ) {
   const { isBackdrop, className, ...divProps } = props;
   const { data } = useProductItemContext();
+  const hasNoImage = !data.backdrop_path || !data.poster_path;
 
   return (
     <div
       className={cn(
         "w-full flex items-center justify-center rounded aspect-[2/3] overflow-hidden",
+        { "border-2 border-gray-400": hasNoImage },
         className,
       )}
       {...divProps}
     >
-      <img
-        src={isBackdrop ? data.backdrop_url : data.poster_url}
-        alt={`${data.title} Poster`}
-        className="object-cover size-full"
-      />
+      {hasNoImage ? (
+        <div className="flex flex-col items-center justify-center gap-1 p-4 text-center bg-gray-700 rounded size-full">
+          <p className="font-medium line-clamp-2 md:line-clamp-3">
+            {data.title}
+          </p>
+          {data.release_date && (
+            <p className="text-xs md:text-sm">
+              {formatDate(data.release_date, "YYYY")}
+            </p>
+          )}
+        </div>
+      ) : (
+        <img
+          src={isBackdrop ? data.backdrop_url : data.poster_url}
+          alt={`${data.title} Poster`}
+          className="object-cover size-full"
+        />
+      )}
     </div>
   );
 }
@@ -53,9 +68,11 @@ function Caption() {
   return (
     <div className="space-y-0.5 font-medium">
       <p className="line-clamp-1">{data.title}</p>
-      <p className="text-xs md:text-sm">
-        {formatDate(data.release_date, "YYYY")}
-      </p>
+      {data.release_date && (
+        <p className="text-xs md:text-sm">
+          {formatDate(data.release_date, "YYYY")}
+        </p>
+      )}
     </div>
   );
 }
