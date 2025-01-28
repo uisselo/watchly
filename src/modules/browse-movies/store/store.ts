@@ -9,6 +9,7 @@ const useBrowseMoviesStore = create<BrowseMoviesState>((set) => ({
     decade: "",
     year: "",
   },
+  searchResults: [],
   clearPayload: () =>
     set({
       payload: {
@@ -53,6 +54,7 @@ const useBrowseMoviesStore = create<BrowseMoviesState>((set) => ({
         },
       };
     }),
+  setSearchResults: (searchResults) => set({ searchResults }),
 }));
 
 export default useBrowseMoviesStore;

@@ -2,6 +2,7 @@ import { useQueries, useQuery } from "react-query";
 import { formatDate } from "@Utilities";
 import { updateMovieData, type MovieListResponse } from "../../shared";
 import { BrowseMoviesApi } from "./api";
+import useBrowseMoviesStore from "./store";
 
 /**
  * Custom hook for fetching and processing data for the Browse Movies Page.
@@ -9,12 +10,16 @@ import { BrowseMoviesApi } from "./api";
  * @param query A search term to filter the movie results.
  */
 export function useBrowseMoviesQueries(query = "", browseMoviesPayload = {}) {
-  const { data: searchResults } = useQuery(
-    "search_movie",
+  const { setSearchResults } = useBrowseMoviesStore();
+
+  useQuery(
+    ["search_movie", query],
     () => BrowseMoviesApi.getSearchResults(query),
     {
       enabled: !!query.length,
-      select: (data) => updateMovieData(data.results),
+      onSuccess: (data) => {
+        setSearchResults(updateMovieData(data.results));
+      },
     },
   );
 
@@ -48,7 +53,6 @@ export function useBrowseMoviesQueries(query = "", browseMoviesPayload = {}) {
   );
 
   return {
-    searchResults,
     firstReleaseYear: releaseYears[0].data,
     latestReleaseYear: releaseYears[1].data,
     browseMovieResults,

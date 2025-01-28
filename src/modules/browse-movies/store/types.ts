@@ -1,4 +1,4 @@
-import type { GenreItem } from "../../shared";
+import type { GenreItem, MovieItem } from "../../shared";
 
 export type BrowseMoviesSortBy =
   | "popularity.desc"
@@ -26,7 +26,9 @@ export type BrowseMoviesPayloadDisplay = {
 
 export type BrowseMoviesState = {
   payload: BrowseMoviesPayloadDisplay;
+  searchResults: MovieItem[];
   clearPayload: () => void;
   updatePayload: (key: keyof BrowseMoviesPayloadDisplay, value: string) => void;
   updateGenres: (data: GenreItem) => void;
+  setSearchResults: (data: MovieItem[]) => void;
 };
