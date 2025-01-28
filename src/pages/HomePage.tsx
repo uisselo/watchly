@@ -11,9 +11,12 @@ import {
 import { formatDate } from "@Utilities";
 
 function HomePage() {
-  const clearPayload = useBrowseMoviesStore((state) => state.clearPayload);
+  const { clearPayload } = useBrowseMoviesStore();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Runs only once on navigation from a different path.
+  /**
+   * biome-ignore lint/correctness/useExhaustiveDependencies:
+   *    Runs only once on navigation from a different path.
+   */
   useEffect(() => {
     clearPayload();
   }, []);
