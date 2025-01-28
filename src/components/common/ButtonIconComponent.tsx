@@ -2,7 +2,10 @@ import { cn, type HeroIconProp } from "@Utilities";
 import GradientSVGComponent from "./GradientSVGComponent";
 import type { ButtonHTMLAttributes } from "react";
 
-type Props = { icon: HeroIconProp } & ButtonHTMLAttributes<HTMLButtonElement>;
+type Props = {
+  icon: HeroIconProp;
+  iconClassName?: string;
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
 /**
  * A button component that displays an icon with a gradient stroke, applying
@@ -15,14 +18,14 @@ type Props = { icon: HeroIconProp } & ButtonHTMLAttributes<HTMLButtonElement>;
  * @param buttonProps - Additional props to pass to the underlying button component, such as `onClick`, `aria-label`, `disabled`, etc.
  */
 function ButtonIconComponent(props: Props) {
-  const { icon: Icon, className, ...buttonProps } = props;
+  const { icon: Icon, iconClassName, className, ...buttonProps } = props;
 
   return (
     <>
       <GradientSVGComponent />
       <button className={cn("relative group", className)} {...buttonProps}>
         <Icon
-          className="size-7 stroke-1.5"
+          className={cn("size-7 stroke-1.5", iconClassName)}
           style={{ stroke: "url(#gradient)" }}
         />
         <div className="absolute rounded-full -inset-1.5 -z-10 transition duration-200 ease-in-out group-active:bg-gray-700" />
