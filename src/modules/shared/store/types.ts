@@ -35,3 +35,9 @@ export type GenreItem = {
   id: number;
   name: string;
 };
+
+export type LanguageItem = {
+  english_name: string;
+  iso_639_1: string;
+  name: string;
+};

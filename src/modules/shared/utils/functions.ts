@@ -1,5 +1,5 @@
 import { IMAGE_URL } from "@Config";
-import type { MovieItem } from "./store";
+import type { MovieItem } from "../store";
 
 /**
  * Constructs a full URL for an image hosted on TMDb.
