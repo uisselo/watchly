@@ -1,24 +1,23 @@
 import { useEffect } from "react";
-import { useMediaQuery } from "@uidotdev/usehooks";
 import { CarouselComponent } from "@GlobalComponents";
 import {
   FilterComponent,
   MovieItemComponent,
-  useBrowseMoviesStore,
+  useBrowseMovieStore,
   useLandingQueries,
   useSharedQueries,
 } from "@Modules";
-import { formatDate } from "@Utilities";
+import { formatDate, useBreakpoints } from "@Utilities";
 
 function HomePage() {
-  const { clearPayload } = useBrowseMoviesStore();
+  const { clearFilters } = useBrowseMovieStore();
 
   /**
    * biome-ignore lint/correctness/useExhaustiveDependencies:
    *    Runs only once on navigation from a different path.
    */
   useEffect(() => {
-    clearPayload();
+    clearFilters();
   }, []);
 
   return (
@@ -31,7 +30,7 @@ function HomePage() {
           <TopRatedMoviesSection />
         </div>
         <div className="col-span-4 md:col-span-6 lg:col-span-4 lg:row-span-5">
-          <FilterComponent showTitle />
+          <FilterComponent hideButton />
         </div>
         <div className="h-auto col-span-4 md:col-span-12 lg:col-span-8 lg:row-span-2">
           <CelebritiesSection />
@@ -62,8 +61,15 @@ function TrendingMoviesSection() {
         }}
       >
         {({ item }) => (
-          <MovieItemComponent key={item.id} data={item} className="relative">
-            <MovieItemComponent.Image className="aspect-[3/2]" isBackdrop />
+          <MovieItemComponent
+            key={item.id}
+            data={item}
+            className="relative"
+          >
+            <MovieItemComponent.Image
+              className="aspect-[3/2]"
+              isBackdrop
+            />
             <div className="absolute bottom-0 z-10 w-full p-3 space-y-1 rounded-b bg-gray-700/70">
               <div className="flex justify-between">
                 <p className="font-semibold">{item.title}</p>
@@ -107,7 +113,7 @@ function TopRatedMoviesSection() {
 }
 
 function CelebritiesSection() {
-  const isSmallScreen = useMediaQuery("(max-width: 420px)");
+  const { isSmallScreen } = useBreakpoints();
   const { popularCelebrities } = useLandingQueries(isSmallScreen ? 6 : 5);
 
   if (!popularCelebrities) return null;
