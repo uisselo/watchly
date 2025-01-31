@@ -11,19 +11,24 @@ type Props = {
 function FilterModalComponent(props: Props) {
   const { onClose, onClick, isApply } = props;
 
+  const handleClick = () => {
+    onClick();
+    onClose();
+  };
+
   return (
-    <div className="container py-4 space-y-12">
-      <div className="flex justify-between">
+    <div className="container pb-12 space-y-12">
+      <div className="flex justify-between py-4">
         <ButtonIconComponent icon={ChevronLeftIcon} onClick={onClose} />
         <h1>Filter Movies</h1>
         <ButtonComponent
           variant="underline"
           size="xs"
           text={isApply ? "Apply" : "Clear"}
-          onClick={onClick}
+          onClick={handleClick}
         />
       </div>
-      <FilterComponent />
+      <FilterComponent hideTitle hideButton />
     </div>
   );
 }

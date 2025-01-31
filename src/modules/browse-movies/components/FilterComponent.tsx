@@ -2,47 +2,45 @@ import type { HTMLAttributes } from "react";
 import { ButtonComponent, MenuComponent } from "@GlobalComponents";
 import { cn } from "@Utilities";
 import { useSharedQueries } from "../../shared";
-import { RATING_OPTIONS } from "../constants";
-import { useBrowseMovies } from "../useBrowseMovies";
+import { useBrowseMovieStore } from "../store";
+import { BrowseMovieHooks, RATING_OPTIONS } from "../utils";
 import FilterItemComponent from "./FilterItemComponent";
 
 type Props = {
-  showTitle?: boolean;
-  isApply?: boolean;
-  onClick?: () => void;
-} & HTMLAttributes<Omit<HTMLDivElement, "onClick">>;
+  hideTitle?: boolean;
+  hideButton?: boolean;
+} & HTMLAttributes<HTMLDivElement>;
 
 function FilterComponent(props: Props) {
-  const { showTitle, isApply, className, onClick, ...divProps } = props;
-  const { genreList } = useSharedQueries();
-  const {
-    payload,
-    decades,
-    yearsInDecade,
-    popularityOptions,
-    onClickFilterItem,
-  } = useBrowseMovies();
+  const { hideTitle, hideButton, className, ...divProps } = props;
 
-  if (!genreList) return null;
+  const { genreList } = useSharedQueries();
+  const { filters } = useBrowseMovieStore();
+
+  const { useVariables, useActions } = BrowseMovieHooks;
+  const { isApplyFilters, popularityOptions, decades, yearsInDecade } =
+    useVariables();
+  const { onClickFilterItem, onClickFilterButton } = useActions();
 
   return (
     <div className={cn("space-y-4", className)} {...divProps}>
-      {(showTitle || onClick) && (
+      {(!hideTitle || !hideButton) && (
         <div
-          className={cn("flex justify-between", {
-            "justify-end": !showTitle && !!onClick,
+          className={cn("flex items-center justify-between", {
+            "justify-end": hideTitle,
           })}
         >
-          {showTitle && <h1>Browse Movies</h1>}
-          {onClick && (
+          {!hideTitle && <h1>Browse Movies</h1>}
+          {!hideButton && (
             <ButtonComponent
               variant="underline"
-              text={isApply ? "Apply Filters" : "Clear Filters"}
-              onClick={onClick}
+              text={isApplyFilters ? "Apply Filters" : "Clear Filters"}
+              onClick={onClickFilterButton}
             />
           )}
         </div>
       )}
+
       <div className="space-y-6 md:p-5 md:bg-gray-700 md:rounded-xl">
         <div className="flex flex-col gap-3">
           <p>Popularity</p>
@@ -51,8 +49,8 @@ function FilterComponent(props: Props) {
               <FilterItemComponent
                 key={item}
                 data={item}
-                isActive={payload.popularity === item}
-                onClick={() => onClickFilterItem(item, "popularity")}
+                isActive={filters.popularity === item}
+                onClick={() => onClickFilterItem("popularity", item)}
               />
             ))}
           </div>
@@ -64,8 +62,8 @@ function FilterComponent(props: Props) {
               <FilterItemComponent
                 key={item}
                 data={item}
-                isActive={payload.rating === item}
-                onClick={() => onClickFilterItem(item, "rating")}
+                isActive={filters.rating === item}
+                onClick={() => onClickFilterItem("rating", item)}
               />
             ))}
           </div>
@@ -73,13 +71,13 @@ function FilterComponent(props: Props) {
         <div className="flex flex-col gap-3">
           <p>Genre</p>
           <div className="flex flex-wrap gap-1.5">
-            {genreList.map((item) => (
+            {genreList?.map((item) => (
               <FilterItemComponent
                 key={item.id}
                 data={item}
                 labelKey="name"
-                isActive={payload.genres.includes(item)}
-                onClick={() => onClickFilterItem(item, "genres")}
+                isActive={filters.genres.includes(item)}
+                onClick={() => onClickFilterItem("genres", item)}
               />
             ))}
           </div>
@@ -87,10 +85,10 @@ function FilterComponent(props: Props) {
         {decades && (
           <div className="flex flex-col gap-3">
             <MenuComponent
-              value={payload.decade}
+              value={filters.decade}
               label="Decade"
               options={decades}
-              onChange={(value) => onClickFilterItem(value, "decade")}
+              onChange={(value) => onClickFilterItem("decade", value)}
             />
           </div>
         )}
@@ -100,8 +98,8 @@ function FilterComponent(props: Props) {
               <FilterItemComponent
                 key={item}
                 data={item}
-                isActive={payload.year === item}
-                onClick={() => onClickFilterItem(item, "year")}
+                isActive={filters.year === item}
+                onClick={() => onClickFilterItem("year", item)}
               />
             ))}
           </div>
