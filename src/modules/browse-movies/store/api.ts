@@ -1,7 +1,7 @@
 import { APIService } from "@API";
-import type { MovieListResponse } from "../../shared";
-import type { BrowseMoviesPayload } from "./types";
 import { identity, pickBy } from "lodash-es";
+import type { MovieListResponse } from "../../shared";
+import type { BrowseMoviePayload } from "./types";
 
 function getSearchResults(query: string) {
   const response = APIService.get<MovieListResponse>("search/movie", {
@@ -11,7 +11,7 @@ function getSearchResults(query: string) {
   return response;
 }
 
-function getMovies(payload: BrowseMoviesPayload) {
+function getMovies(payload: BrowseMoviePayload) {
   const {
     primary_release_date_gte,
     primary_release_date_lte,
@@ -36,4 +36,4 @@ function getMovies(payload: BrowseMoviesPayload) {
   return response;
 }
 
-export const BrowseMoviesApi = { getSearchResults, getMovies };
+export const BrowseMovieApi = { getSearchResults, getMovies };

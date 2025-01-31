@@ -1,14 +1,15 @@
 import type { GenreItem, MovieItem } from "../../shared";
 
-export type BrowseMoviesSortBy =
+export type BrowseMovieSortBy =
+  | "popularity.asc"
   | "popularity.desc"
   | "primary_release_date.asc"
   | "primary_release_date.desc"
   | "vote_average.asc"
   | "vote_average.desc";
 
-export type BrowseMoviesPayload = Partial<{
-  sort_by: BrowseMoviesSortBy;
+export type BrowseMoviePayload = Partial<{
+  sort_by: BrowseMovieSortBy;
   primary_release_year: string;
   primary_release_date_gte: string;
   primary_release_date_lte: string;
@@ -16,7 +17,7 @@ export type BrowseMoviesPayload = Partial<{
   with_genres: string;
 }>;
 
-export type BrowseMoviesPayloadDisplay = {
+export type BrowseMovieFilters = {
   popularity: string;
   rating: string;
   genres: GenreItem[];
@@ -24,11 +25,17 @@ export type BrowseMoviesPayloadDisplay = {
   year: string;
 };
 
-export type BrowseMoviesState = {
-  payload: BrowseMoviesPayloadDisplay;
+export type BrowseMovieState = {
+  filters: BrowseMovieFilters;
+  appliedFilters: BrowseMovieFilters;
+  appliedQuery: string;
   searchResults: MovieItem[];
-  clearPayload: () => void;
-  updatePayload: (key: keyof BrowseMoviesPayloadDisplay, value: string) => void;
-  updateGenres: (data: GenreItem) => void;
+  payload: BrowseMoviePayload;
+  clearFilters: () => void;
+  clearAppliedFilters: () => void;
+  setFilters: (data: BrowseMovieFilters) => void;
+  setAppliedFilters: (data: BrowseMovieFilters) => void;
+  setAppliedQuery: (data: string) => void;
   setSearchResults: (data: MovieItem[]) => void;
+  setPayload: (data: BrowseMoviePayload) => void;
 };
