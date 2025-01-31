@@ -19,6 +19,16 @@ type Props = PropsWithChildren<
   } & Omit<DialogProps, "onClose">
 >;
 
+/**
+ * A reusable modal component built with Headless UI.
+ *
+ * @param children - The content to be displayed inside the modal.
+ * @param onChangeVisibility - Callback function triggered when the modal's visibility changes.
+ * @param className - Additional class names for styling the modal.
+ * @param dialogProps - Additional props passed to the `Dialog` component.
+ *
+ * @returns A modal component that can be controlled via a ref.
+ */
 const ModalComponent = forwardRef<ModalComponentFunctions, Props>(
   ({ children, onChangeVisibility, className, ...dialogProps }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +54,7 @@ const ModalComponent = forwardRef<ModalComponentFunctions, Props>(
       <Dialog
         open={isOpen}
         onClose={close}
-        className={cn("absolute inset-0", className)}
+        className={cn("fixed inset-0 overflow-y-scroll", className)}
         {...dialogProps}
       >
         {children}
