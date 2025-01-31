@@ -24,7 +24,7 @@
 	}
 
 	.scrollable::-webkit-scrollbar {
-		width: 8px;
+		width: 5px;
 	}
 	
 	.scrollable::-webkit-scrollbar-track {
@@ -32,8 +32,7 @@
 	}
 	
 	.scrollable::-webkit-scrollbar-thumb {
-		background: #888;
-		border-radius: 5px;
+		@apply bg-gray-500 rounded-xl;
 	}
 	
 	.scrollable::-webkit-scrollbar-thumb:hover {
