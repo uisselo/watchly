@@ -1,6 +1,11 @@
 import { createBrowserRouter } from "react-router";
 import { LayoutComponent } from "@GlobalComponents";
-import { BrowseMoviesPage, ErrorPage, HomePage } from "@Pages";
+import {
+  BrowseMoviesPage,
+  ErrorPage,
+  HomePage,
+  MovieDetailsPage,
+} from "@Pages";
 
 const router = createBrowserRouter([
   {
@@ -9,6 +14,7 @@ const router = createBrowserRouter([
     children: [
       { path: "", element: <HomePage /> },
       { path: "browse", element: <BrowseMoviesPage /> },
+      { path: "movie/:id", element: <MovieDetailsPage /> },
     ],
     errorElement: <ErrorPage />,
   },
