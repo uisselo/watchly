@@ -1,4 +1,5 @@
 import type { HTMLAttributes, PropsWithChildren } from "react";
+import { Link } from "react-router";
 import { cn, formatDate } from "@Utilities";
 import { MovieItemContext, useProductItemContext } from "../contexts";
 import type { MovieItem } from "../store";
@@ -12,9 +13,14 @@ function MovieItemComponent(props: Props) {
 
   return (
     <MovieItemContext.Provider value={{ data }}>
-      <div className={cn("flex flex-col gap-3", className)} {...divProps}>
-        {children}
-      </div>
+      <Link to={`/movie/${data.id}`}>
+        <div
+          className={cn("flex flex-col gap-3", className)}
+          {...divProps}
+        >
+          {children}
+        </div>
+      </Link>
     </MovieItemContext.Provider>
   );
 }
@@ -29,7 +35,7 @@ function Image(
 ) {
   const { isBackdrop, className, ...divProps } = props;
   const { data } = useProductItemContext();
-  const hasNoImage = !data.backdrop_path || !data.poster_path;
+  const hasNoImage = !data.backdrop_path && !data.poster_path;
 
   return (
     <div
