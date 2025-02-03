@@ -1,9 +1,15 @@
 import {
   type ButtonHTMLAttributes,
+  type ElementType,
   type PropsWithChildren,
   useState,
 } from "react";
-import { Input, type InputProps } from "@headlessui/react";
+import {
+  ComboboxInput,
+  type ComboboxInputProps,
+  Input,
+  type InputProps,
+} from "@headlessui/react";
 import {
   MagnifyingGlassIcon,
   XMarkIcon,
@@ -11,17 +17,22 @@ import {
 import { cn } from "@Utilities";
 import ButtonIconComponent from "./ButtonIconComponent";
 
+type Props =
+  | ({ isAutocomplete: true } & PropsWithChildren<ComboboxInputProps>)
+  | ({ isAutocomplete?: false } & PropsWithChildren<InputProps>);
+
 /**
  * A search box component with an input field and optional search/clear icons.
+ * The component can either be a simple input or a combobox based on the `isAutocomplete` prop.
  *
+ * @param isAutocomplete - If true, the component will render a combobox input.
  * @param children - Optional child elements to be displayed inside the search box.
  * @param className - Additional class names for styling the search box.
  * @param inputProps - Additional props passed to the `Input` component.
- *
- * @returns A styled search input field with optional icons and focus effect.
  */
-function SearchBoxComponent(props: PropsWithChildren<InputProps>) {
-  const { children, className, ...inputProps } = props;
+function SearchBoxComponent(props: Props) {
+  const { children, isAutocomplete, className, ...inputProps } = props;
+  const Element: ElementType = isAutocomplete ? ComboboxInput : Input;
 
   const [focused, setFocused] = useState(false);
 
@@ -35,7 +46,7 @@ function SearchBoxComponent(props: PropsWithChildren<InputProps>) {
         className,
       )}
     >
-      <Input
+      <Element
         className="w-full bg-transparent focus:outline-none grow"
         placeholder="Search"
         {...{ onFocus, onBlur }}
@@ -60,8 +71,6 @@ export default SearchBoxComponent;
  *
  * @param isSearch - Determines whether to show the search icon or the clear (X) icon.
  * @param buttonProps - Additional props passed to the button component.
- *
- * @returns A button with either a search or clear icon.
  */
 function ButtonIcon(
   props: { isSearch: boolean } & ButtonHTMLAttributes<HTMLButtonElement>,
