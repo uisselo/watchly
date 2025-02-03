@@ -68,11 +68,15 @@ function Image(
   );
 }
 
-function Caption() {
+function Caption(props: HTMLAttributes<HTMLDivElement>) {
+  const { className, ...divProps } = props;
   const { data } = useProductItemContext();
 
   return (
-    <div className="space-y-0.5 font-medium">
+    <div
+      className={cn("space-y-0.5 font-medium", className)}
+      {...divProps}
+    >
       <p className="line-clamp-1">{data.title}</p>
       {data.release_date && (
         <p className="text-xs md:text-sm">
