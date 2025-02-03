@@ -23,7 +23,10 @@ function ButtonIconComponent(props: Props) {
   return (
     <>
       <GradientSVGComponent />
-      <button className={cn("relative group", className)} {...buttonProps}>
+      <button
+        className={cn("relative group focus:outline-none", className)}
+        {...buttonProps}
+      >
         <Icon
           className={cn("size-7 stroke-1.5", iconClassName)}
           style={{ stroke: "url(#gradient)" }}
