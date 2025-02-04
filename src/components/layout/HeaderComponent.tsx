@@ -8,7 +8,6 @@ import {
 import {
   Bars3Icon,
   MagnifyingGlassIcon,
-  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { SVGs } from "@Assets";
 import { HEADER_NAV_ITEMS } from "@Config";
@@ -27,16 +26,21 @@ import {
   type ModalComponentFunctions,
   SearchBoxComponent,
 } from "../common";
+import { HeaderContext, useHeaderContext } from "./contexts";
 import NavItemComponent from "./NavItemComponent";
 import NavModalComponent from "./NavModalComponent";
 
-function HeaderComponent({ onClose }: { onClose?: () => void }) {
+function HeaderComponent() {
   const location = useLocation();
-  const navModalComponentRef = useRef<ModalComponentFunctions>(null);
+  const { isMediumScreen } = useBreakpoints();
+  const navModalRef = useRef<ModalComponentFunctions>(null);
 
-  const handleNavClick = () => {
-    if (onClose) onClose();
-    navModalComponentRef.current?.open();
+  const [query, setQuery] = useState("");
+  const [isSearch, setIsSearch] = useState(false);
+
+  const handleIconClick = (searchIcon?: boolean) => {
+    setIsSearch(searchIcon || false);
+    navModalRef.current?.open();
   };
 
   /**
@@ -44,52 +48,74 @@ function HeaderComponent({ onClose }: { onClose?: () => void }) {
    *  Should always run every time the route changes.
    */
   useEffect(() => {
-    navModalComponentRef.current?.close();
+    navModalRef.current?.close();
   }, [location]);
 
+  /**
+   * biome-ignore lint/correctness/useExhaustiveDependencies:
+   *  Should only run on query change.
+   */
+  useEffect(() => {
+    if (query.length && isMediumScreen && !isSearch) {
+      setIsSearch(true);
+      navModalRef.current?.open();
+    }
+  }, [query]);
+
   return (
-    <header className="container sticky top-0 z-20 flex items-center justify-between py-4 bg-gray-800 lg:grid-container lg:py-6">
-      <div className="flex items-center gap-4 md:col-span-8 lg:col-span-5">
-        <ButtonIconComponent
-          icon={onClose ? XMarkIcon : Bars3Icon}
-          className="lg:hidden"
-          onClick={handleNavClick}
-        />
-        <Link to="/">
-          <img src={SVGs.logo} alt="Watchly Logo" className="w-[120px]" />
-        </Link>
-      </div>
-      <div className="flex items-center gap-16 md:col-span-4 lg:col-span-7">
-        <div className="hidden lg:block">
-          <div className="flex items-center justify-end gap-12 w-max">
-            {HEADER_NAV_ITEMS.map((item) => (
-              <NavItemComponent
-                key={item.link}
-                to={item.link}
-                text={item.label}
-                isDesktop
-              />
-            ))}
+    <HeaderContext.Provider
+      value={{
+        navModalRef,
+        query,
+        isSearch,
+        setQuery,
+        setIsSearch,
+      }}
+    >
+      <header className="container sticky top-0 z-20 flex items-center justify-between py-4 bg-gray-800 lg:py-6">
+        <div className="flex items-center gap-4">
+          <ButtonIconComponent
+            icon={Bars3Icon}
+            className="lg:hidden"
+            onClick={() => handleIconClick()}
+          />
+          <Link to="/">
+            <img
+              src={SVGs.logo}
+              alt="Watchly Logo"
+              className="w-[120px]"
+            />
+          </Link>
+        </div>
+        <div className="flex items-center gap-16">
+          <div className="hidden lg:block">
+            <div className="flex items-center justify-end gap-12 w-max">
+              {HEADER_NAV_ITEMS.map((item) => (
+                <NavItemComponent
+                  key={item.link}
+                  to={item.link}
+                  text={item.label}
+                  isActive={item.link === location.pathname}
+                  isDesktop
+                />
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center gap-3 grow">
+            <AutocompleteSearch />
+            <ButtonComponent text="Sign up" className="hidden lg:flex" />
+            <ButtonIconComponent
+              icon={MagnifyingGlassIcon}
+              className="md:hidden"
+              onClick={() => handleIconClick(true)}
+            />
           </div>
         </div>
-        <div className="flex items-center gap-3 grow">
-          <AutocompleteSearch />
-          <ButtonComponent text="Sign up" className="hidden lg:flex" />
-          <ButtonIconComponent
-            icon={MagnifyingGlassIcon}
-            className="md:hidden"
-          />
-        </div>
-      </div>
-      <ModalComponent
-        ref={navModalComponentRef}
-        className="z-50 bg-gray-800"
-      >
-        <NavModalComponent
-          onClose={() => navModalComponentRef.current?.close()}
-        />
-      </ModalComponent>
-    </header>
+        <ModalComponent ref={navModalRef} className="z-50 bg-gray-800">
+          <NavModalComponent />
+        </ModalComponent>
+      </header>
+    </HeaderContext.Provider>
   );
 }
 
@@ -97,9 +123,8 @@ export default HeaderComponent;
 
 function AutocompleteSearch() {
   const navigate = useNavigate();
+  const { query, setQuery } = useHeaderContext();
   const { isLargeScreen } = useBreakpoints();
-
-  const [query, setQuery] = useState("");
 
   const { searchResults } = useBrowseMovieStore();
   useBrowseMovieQueries(query);
@@ -119,7 +144,7 @@ function AutocompleteSearch() {
         <SearchBoxComponent
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="hidden md:flex"
+          className="hidden w-[18rem] md:flex"
           isAutocomplete
         />
         {isLargeScreen && (
